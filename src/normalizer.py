@@ -4,6 +4,13 @@ normalizer.py
 ─────────────────────────────────────────────────
 다양한 해상도/프레임률/색상의 입력을 받아
 우리 시스템이 학습된 도메인에 가깝게 변환
+
+[Phase 7 업데이트]
+실험 결과(paper/experiments/05~06) CLAHE는 추론 시
+detection 성능을 28.6% 저하시킴이 확인됨.
+이에 따라 모든 픽셀 변환(CLAHE, 그레이스케일)을 제거하고
+사양 통일(해상도/FPS/길이)만 수행하도록 변경.
+원본 사양 유지로 99.3% 성능 달성.
 """
 
 import os
@@ -19,7 +26,7 @@ MAX_DURATION    = 180   # 최대 3분 (초과 시 잘라냄)
 
 
 class VideoNormalizer:
-    """입력 영상을 VISEM 표준으로 변환"""
+    """입력 영상을 VISEM 표준으로 변환 (사양 통일만)"""
 
     # ── 정규화 필요성 판단 ────────────────────────────────
     @staticmethod
@@ -33,9 +40,9 @@ class VideoNormalizer:
         """
         if tolerance is None:
             tolerance = {
-                'width_diff':    50,    # 50px 이내면 OK
+                'width_diff':    50,
                 'height_diff':   50,
-                'fps_diff':      8,     # 8fps 이내면 OK
+                'fps_diff':      8,
                 'duration_max':  MAX_DURATION,
             }
 
@@ -47,7 +54,7 @@ class VideoNormalizer:
                 f"해상도 차이 ({metadata['width']}×{metadata['height']} → "
                 f"{TARGET_WIDTH}×{TARGET_HEIGHT})")
         if abs(metadata['height'] - TARGET_HEIGHT) > tolerance['height_diff']:
-            if not reasons:  # 위에서 안 잡혔다면
+            if not reasons:
                 reasons.append(
                     f"해상도 차이 ({metadata['width']}×{metadata['height']} → "
                     f"{TARGET_WIDTH}×{TARGET_HEIGHT})")
@@ -55,12 +62,14 @@ class VideoNormalizer:
         # FPS 차이
         if abs(metadata['fps'] - TARGET_FPS) > tolerance['fps_diff']:
             reasons.append(
-                f"프레임률 차이 ({metadata['fps']:.0f}fps → {TARGET_FPS}fps)")
+                f"프레임률 차이 ({metadata['fps']:.0f}fps → "
+                f"{TARGET_FPS}fps)")
 
         # 길이
         if metadata['duration'] > tolerance['duration_max']:
             reasons.append(
-                f"영상 길이 ({metadata['duration']:.0f}초 → {tolerance['duration_max']}초로 자름)")
+                f"영상 길이 ({metadata['duration']:.0f}초 → "
+                f"{tolerance['duration_max']}초로 자름)")
 
         needs = len(reasons) > 0
         return needs, reasons
@@ -74,9 +83,8 @@ class VideoNormalizer:
         Returns:
             'none'      - 정규화 불필요 (그대로 사용)
             'trim'      - 길이만 자름 (빠름, 1~5초)
-            'full'      - 전체 변환 (느림, 30~120초)
+            'full'      - 사양 변환 (느림, 30~120초)
         """
-        # 해상도/FPS 차이 확인
         width_diff  = abs(metadata['width']  - TARGET_WIDTH)
         height_diff = abs(metadata['height'] - TARGET_HEIGHT)
         fps_diff    = abs(metadata['fps']    - TARGET_FPS)
@@ -94,15 +102,15 @@ class VideoNormalizer:
             return 'trim'
         return 'none'
 
-    # ── 빠른 컷팅 (CLAHE 포함, 재인코딩 1회) ─────────────
+    # ── 빠른 컷팅 (사양만, 픽셀 변환 없음) ────────────────
     def fast_trim(self, input_path: str,
                   output_path: str = None,
                   progress_callback=None) -> dict:
         """
         길이만 다른 영상의 빠른 변환
         - 처음 MAX_DURATION 초만 사용
-        - 해상도/FPS 변환은 안 함
-        - CLAHE 대비 향상은 적용 (정자 가시성 ↑)
+        - 해상도/FPS는 원본 유지
+        - 픽셀 변환 없음 (CLAHE 제거됨)
         """
         if output_path is None:
             base, ext = os.path.splitext(input_path)
@@ -140,22 +148,15 @@ class VideoNormalizer:
             cap.release()
             return self._error("출력 영상 생성 실패")
 
-        # CLAHE 한 번만 생성
-        clahe = cv2.createCLAHE(
-            clipLimit=2.0, tileGridSize=(8, 8))
-
+        # 단순 복사 - 픽셀 변환 없음 (실험 결과 CLAHE 제거)
         last_pct = -1
         for i in range(max_frames):
             ret, frame = cap.read()
             if not ret:
                 break
 
-            # CLAHE 대비 향상 (정자 가시성 ↑)
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gray = clahe.apply(gray)
-            frame_out = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-
-            out.write(frame_out)
+            # 사양 통일만 수행 (CLAHE 등 픽셀 변환 제거)
+            out.write(frame)
 
             if progress_callback:
                 pct = int((i + 1) / max_frames * 100)
@@ -185,29 +186,29 @@ class VideoNormalizer:
             'changes':     [
                 f"길이 {orig_duration:.0f}초 → "
                 f"{MAX_DURATION}초로 자름",
-                "대비 향상 (CLAHE 적용)",
             ],
             'error':       None,
         }
 
+    # ── 풀 정규화 (사양 변환만, 픽셀 변환 없음) ───────────
     def normalize(self, input_path: str,
                   output_path: str = None,
                   progress_callback=None) -> dict:
         """
         영상 정규화 후 결과 반환
 
+        - 해상도/FPS/길이를 표준으로 변환
+        - 픽셀 값은 원본 그대로 유지 (CLAHE/그레이스케일 제거)
+
         Args:
             input_path: 입력 영상 경로
             output_path: 출력 경로 (None이면 자동 생성)
             progress_callback: 진행률 보고 콜백 함수
-                callback(current_frame, total_frames, percent)
         """
-        # 출력 경로 자동 생성
         if output_path is None:
             base, ext = os.path.splitext(input_path)
             output_path = f"{base}_normalized.mp4"
 
-        # 입력 영상 열기
         cap = cv2.VideoCapture(input_path)
         if not cap.isOpened():
             return self._error("영상을 열 수 없습니다.")
@@ -230,18 +231,10 @@ class VideoNormalizer:
         changes = []
 
         # ── 변환 결정 ────────────────────────────────────
-        # 해상도 변경 필요 여부
         need_resize = (orig_width != TARGET_WIDTH or
                        orig_height != TARGET_HEIGHT)
-
-        # FPS 변경 필요 여부 (5fps 이상 차이나면)
         need_fps_change = abs(orig_fps - TARGET_FPS) >= 5
-
-        # 길이 자르기 필요 여부
         need_trim = orig_duration > MAX_DURATION
-
-        # 그레이스케일 변환은 항상 수행 (색상 정규화)
-        # → 위상차 현미경처럼 보이게
 
         if need_resize:
             changes.append(
@@ -252,22 +245,21 @@ class VideoNormalizer:
                 f"프레임률 {orig_fps:.0f}fps → {TARGET_FPS}fps")
         if need_trim:
             changes.append(
-                f"길이 {orig_duration:.0f}초 → {MAX_DURATION}초로 자름")
-        changes.append("그레이스케일 변환 (위상차 시뮬레이션)")
+                f"길이 {orig_duration:.0f}초 → "
+                f"{MAX_DURATION}초로 자름")
 
         # ── VideoWriter 준비 ─────────────────────────────
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(
             output_path, fourcc, TARGET_FPS,
             (TARGET_WIDTH, TARGET_HEIGHT),
-            isColor=True)  # 그레이스케일이지만 3채널로 저장
+            isColor=True)
 
         if not out.isOpened():
             cap.release()
             return self._error("출력 영상 생성 실패")
 
-        # ── 프레임 처리 루프 (순차 읽기로 최적화) ───────
-        # FPS 변환을 위한 비율
+        # ── 프레임 처리 루프 ─────────────────────────────
         fps_ratio = orig_fps / TARGET_FPS if orig_fps > 0 else 1.0
 
         max_frames_to_read = orig_frames
@@ -284,9 +276,6 @@ class VideoNormalizer:
             target_orig_indices.add(orig_idx)
             target_frame_idx += 1
 
-        clahe = cv2.createCLAHE(
-            clipLimit=2.0, tileGridSize=(8, 8))
-
         frames_written = 0
         orig_frame_idx = 0
         last_reported_pct = -1
@@ -297,8 +286,8 @@ class VideoNormalizer:
             if not ret:
                 break
 
-            # 이 프레임이 출력 대상인가?
             if orig_frame_idx in target_orig_indices:
+                # 해상도 변환만 (픽셀 변환 없음)
                 if need_resize:
                     frame = cv2.resize(
                         frame, (TARGET_WIDTH, TARGET_HEIGHT),
@@ -306,16 +295,12 @@ class VideoNormalizer:
                         if orig_width > TARGET_WIDTH
                         else cv2.INTER_LINEAR)
 
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                gray = clahe.apply(gray)
-
-                frame_out = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-                out.write(frame_out)
+                # 그대로 저장 (CLAHE 등 픽셀 변환 제거)
+                out.write(frame)
                 frames_written += 1
 
             orig_frame_idx += 1
 
-            # 진행률 콜백 (5%마다)
             if progress_callback and max_frames_to_read > 0:
                 pct = int(orig_frame_idx / max_frames_to_read * 100)
                 if pct != last_reported_pct and pct % 5 == 0:
@@ -326,12 +311,10 @@ class VideoNormalizer:
         cap.release()
         out.release()
 
-        # 최종 콜백
         if progress_callback:
             progress_callback(
                 max_frames_to_read, max_frames_to_read, 100)
 
-        # ── 결과 메타데이터 ─────────────────────────────
         normalized = {
             'width':    TARGET_WIDTH,
             'height':   TARGET_HEIGHT,
