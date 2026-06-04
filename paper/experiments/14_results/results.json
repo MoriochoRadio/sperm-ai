@@ -1,0 +1,82 @@
+[
+  {
+    "mode": "original",
+    "name": "원본",
+    "quality_score": 98,
+    "grade": "S",
+    "dim_scores": {
+      "resolution": 100,
+      "fps": 100,
+      "duration": 100,
+      "stability": 90,
+      "brightness": 100,
+      "sharpness": 100
+    },
+    "avg_count": 45.75,
+    "avg_confidence": 0.6466458812763131
+  },
+  {
+    "mode": "low_resolution",
+    "name": "저해상도",
+    "quality_score": 92,
+    "grade": "S",
+    "dim_scores": {
+      "resolution": 100,
+      "fps": 100,
+      "duration": 100,
+      "stability": 90,
+      "brightness": 100,
+      "sharpness": 75
+    },
+    "avg_count": 45.1,
+    "avg_confidence": 0.6878666996030744
+  },
+  {
+    "mode": "motion_blur",
+    "name": "모션 블러",
+    "quality_score": 92,
+    "grade": "S",
+    "dim_scores": {
+      "resolution": 100,
+      "fps": 100,
+      "duration": 100,
+      "stability": 90,
+      "brightness": 100,
+      "sharpness": 75
+    },
+    "avg_count": 35.85,
+    "avg_confidence": 0.586975870313671
+  },
+  {
+    "mode": "noise",
+    "name": "노이즈",
+    "quality_score": 100,
+    "grade": "S",
+    "dim_scores": {
+      "resolution": 100,
+      "fps": 100,
+      "duration": 100,
+      "stability": 100,
+      "brightness": 100,
+      "sharpness": 100
+    },
+    "avg_count": 14.5,
+    "avg_confidence": 0.4015009050739223
+  },
+  {
+    "mode": "low_light_blur",
+    "name": "저조도+블러",
+    "quality_score": 69,
+    "grade": "B",
+    "dim_scores": {
+      "resolution": 100,
+      "fps": 100,
+      "duration": 100,
+      "stability": 90,
+      "brightness": 25,
+      "sharpness": 30
+    },
+    "avg_count": 22.7,
+    "avg_confidence": 0.49882115095459945
+  }
+]

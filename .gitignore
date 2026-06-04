@@ -73,3 +73,7 @@ models/
 # ── ngrok ─────────────────────────────────────────
 ngrok.exe
 ngrok.yml
+
+# ── 논문 실험 산출물 (그림 PNG·결과 영상은 코드만 공유) ──
+paper/figures/**/*.png
+paper/experiments/**/*.mp4

@@ -1,0 +1,38 @@
+[
+  {
+    "threshold": 0.15,
+    "avg_count": 48.22,
+    "avg_confidence": 0.6248598582192805,
+    "n_tracks": 103,
+    "avg_track_length": 93.46601941747574,
+    "long_tracks_ratio": 0.7378640776699029,
+    "inference_ms": 28.3549165725708
+  },
+  {
+    "threshold": 0.25,
+    "avg_count": 45.86,
+    "avg_confidence": 0.6468065389238276,
+    "n_tracks": 103,
+    "avg_track_length": 93.19417475728156,
+    "long_tracks_ratio": 0.7378640776699029,
+    "inference_ms": 14.04963493347168
+  },
+  {
+    "threshold": 0.4,
+    "avg_count": 42.9,
+    "avg_confidence": 0.6691898078907342,
+    "n_tracks": 100,
+    "avg_track_length": 90.1,
+    "long_tracks_ratio": 0.72,
+    "inference_ms": 13.686189651489258
+  },
+  {
+    "threshold": 0.55,
+    "avg_count": 37.72,
+    "avg_confidence": 0.6936258965686422,
+    "n_tracks": 117,
+    "avg_track_length": 65.22222222222223,
+    "long_tracks_ratio": 0.6666666666666666,
+    "inference_ms": 13.438835144042969
+  }
+]

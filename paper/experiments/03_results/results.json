@@ -1,0 +1,50 @@
+[
+  {
+    "label": "참가자 11",
+    "grade": "S",
+    "quality_score": 98,
+    "sharpness_score": 100,
+    "orig_detections": 45.87,
+    "orig_confidence": 0.6463999537917974,
+    "norm_detections": 25.67,
+    "norm_confidence": 0.5333447067780304,
+    "delta_count": -20.199999999999996,
+    "delta_confidence": -0.11305524701376701
+  },
+  {
+    "label": "참가자 14",
+    "grade": "S",
+    "quality_score": 96,
+    "sharpness_score": 90,
+    "orig_detections": 4.05,
+    "orig_confidence": 0.585306488952519,
+    "norm_detections": 4.64,
+    "norm_confidence": 0.6359109965249382,
+    "delta_count": 0.5899999999999999,
+    "delta_confidence": 0.05060450757241919
+  },
+  {
+    "label": "참가자 22",
+    "grade": "S",
+    "quality_score": 92,
+    "sharpness_score": 90,
+    "orig_detections": 10.99,
+    "orig_confidence": 0.6883285148128583,
+    "norm_detections": 10.76,
+    "norm_confidence": 0.6680912285156853,
+    "delta_count": -0.23000000000000043,
+    "delta_confidence": -0.02023728629717303
+  },
+  {
+    "label": "참가자 23",
+    "grade": "A",
+    "quality_score": 84,
+    "sharpness_score": 75,
+    "orig_detections": 3.89,
+    "orig_confidence": 0.6651377752231755,
+    "norm_detections": 3.72,
+    "norm_confidence": 0.6271452229990754,
+    "delta_count": -0.16999999999999993,
+    "delta_confidence": -0.03799255222410014
+  }
+]

@@ -1,0 +1,24 @@
+
+flowchart TB
+    A[Input<br/>Microscopy Video] --> B{{Quality Assessment<br/>6-dim Score}}
+    B -->|F grade| C[Reject<br/>+ Guide]
+    B -->|S/A/B/C| D[Smart Normalization<br/>spec-only]
+    D --> E[Detection<br/>YOLO11m]
+    E --> F[Tracking<br/>ByteTrack]
+    F --> G1[Motility<br/>Analysis]
+    F --> G2[CASA<br/>Kinematics]
+    F --> G3[Morphology v3<br/>EfficientNet-B3<br/>+ VisemStyleAugment]
+    G1 --> H[Comprehensive<br/>Report]
+    G2 --> H
+    G3 --> H
+    
+    style B fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style D fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style G3 fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style C fill:#FEE2E2,stroke:#DC2626
+    style A fill:#FEF3C7,stroke:#F59E0B
+    style H fill:#FEF3C7,stroke:#F59E0B
+    style E fill:#E0E7FF,stroke:#6366F1
+    style F fill:#E0E7FF,stroke:#6366F1
+    style G1 fill:#D1FAE5,stroke:#10B981
+    style G2 fill:#D1FAE5,stroke:#10B981

@@ -1,0 +1,24 @@
+
+flowchart LR
+    A[Input<br/>Video] --> B{{Quality<br/>Assessment<br/>6-dim}}
+    B -->|F| C[Reject]
+    B -->|S/A/B/C| D[Smart<br/>Normalization]
+    D --> E[YOLO11m<br/>Detection]
+    E --> F[ByteTrack<br/>Tracking]
+    F --> G[Motility]
+    F --> H[CASA<br/>Kinematics]
+    F --> I[Morphology v3<br/>+ VisemStyleAugment]
+    G --> J[Report]
+    H --> J
+    I --> J
+    
+    style B fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style D fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style I fill:#DBEAFE,stroke:#2563EB,stroke-width:3px
+    style C fill:#FEE2E2,stroke:#DC2626
+    style A fill:#FEF3C7,stroke:#F59E0B
+    style J fill:#FEF3C7,stroke:#F59E0B
+    style E fill:#E0E7FF,stroke:#6366F1
+    style F fill:#E0E7FF,stroke:#6366F1
+    style G fill:#D1FAE5,stroke:#10B981
+    style H fill:#D1FAE5,stroke:#10B981

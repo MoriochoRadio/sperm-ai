@@ -1,0 +1,100 @@
+{
+  "models": [
+    {
+      "version": "v1",
+      "description": "기본 학습 (BCE Loss)",
+      "training_method": "기본 train/val/test split (1,000개)",
+      "augmentation": "기본 (flip, rotation)",
+      "loss": "BCE Loss",
+      "mhsma_auc_avg": 0.752,
+      "mhsma_aucs": {
+        "head": 0.733,
+        "acrosome": 0.745,
+        "vacuole": 0.778,
+        "tail": 0.752
+      },
+      "visem_normal_rate": 0.5,
+      "verdict": "벤치마크 기본, VISEM 비현실적"
+    },
+    {
+      "version": "v2",
+      "description": "전체 데이터 + Focal Loss",
+      "training_method": "전체 1,540개 + WeightedRandomSampler",
+      "augmentation": "기본 + 클래스 균형",
+      "loss": "Focal Loss (alpha tuning)",
+      "mhsma_auc_avg": 0.8,
+      "mhsma_aucs": {
+        "head": 0.785,
+        "acrosome": 0.812,
+        "vacuole": 0.823,
+        "tail": 0.78
+      },
+      "visem_normal_rate": 0.5,
+      "verdict": "벤치마크 최고, VISEM 여전히 비현실적"
+    },
+    {
+      "version": "v3",
+      "description": "VisemStyleAugment (도메인 적응)",
+      "training_method": "전체 1,540개 + Focal + VISEM 스타일",
+      "augmentation": "VisemStyleAugment (모션블러+노이즈+저해상도+CLAHE+명암반전)",
+      "loss": "Focal Loss",
+      "mhsma_auc_avg": 0.725,
+      "mhsma_aucs": {
+        "head": 0.677,
+        "acrosome": 0.711,
+        "vacuole": 0.767,
+        "tail": 0.752
+      },
+      "visem_normal_rate": 8.3,
+      "verdict": "⭐ 채택 - 벤치마크 손해 vs 실용성"
+    },
+    {
+      "version": "v4",
+      "description": "강한 증강",
+      "training_method": "전체 + Focal + 강한 VISEM 스타일",
+      "augmentation": "v3보다 공격적 (블러 70%, 저해상도 70%)",
+      "loss": "Focal Loss",
+      "mhsma_auc_avg": 0.716,
+      "mhsma_aucs": {
+        "head": 0.658,
+        "acrosome": 0.701,
+        "vacuole": 0.755,
+        "tail": 0.749
+      },
+      "visem_normal_rate": 13.5,
+      "verdict": "VISEM 더 높지만 MHSMA 더 손해, 미채택"
+    }
+  ],
+  "domain_adaptation_attempts": [
+    {
+      "method": "1. Pseudo-labeling",
+      "description": "VISEM 크롭에 v2 모델로 예측 → 높은 확신도 예측을 정답으로 사용",
+      "result": "실패",
+      "reason": "이미 편향된 예측이 더 강화됨 (확증 편향)"
+    },
+    {
+      "method": "2. 기하학적 측정",
+      "description": "cv2.fitEllipse로 정자 머리 크기 직접 측정",
+      "result": "실패",
+      "reason": "크롭 스케일 보정 후에도 딥러닝보다 정밀도 낮음"
+    },
+    {
+      "method": "3. TTA (Test-Time Augmentation)",
+      "description": "추론 시 여러 번 증강 후 평균",
+      "result": "부분 성공",
+      "reason": "28.4% 도달 가능하나 크롭당 11회 추론으로 매우 느림"
+    },
+    {
+      "method": "4. 앙상블 (v2 + v3)",
+      "description": "두 모델 예측값 가중 평균",
+      "result": "실패",
+      "reason": "v2 쪽으로 끌려가서 결국 0.9% (v2와 유사)"
+    },
+    {
+      "method": "5. VisemStyleAugment (v3, 채택)",
+      "description": "학습 시 VISEM 도메인 시뮬레이션 증강",
+      "result": "✅ 성공",
+      "reason": "학습 단계에서 도메인 갭 해결, 추론 시 추가 변환 불필요"
+    }
+  ]
+}

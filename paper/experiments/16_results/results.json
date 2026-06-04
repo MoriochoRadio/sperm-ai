@@ -1,0 +1,23 @@
+{
+  "video_info": {
+    "n_frames": 1470,
+    "fps": 49.0,
+    "duration": 30.0
+  },
+  "loading_times": {
+    "yolo": 0.0691831111907959,
+    "morphology": 0.5509302616119385,
+    "quality": 0.0,
+    "total": 0.6201133728027344
+  },
+  "processing_times": {
+    "quality": 0.09670758247375488,
+    "detection": 25.932164907455444,
+    "detection_fps": 56.6863586301419,
+    "tracking": 30.438591480255127,
+    "tracking_fps": 48.29395607722381,
+    "morphology_per_100": 1.4652421474456787
+  },
+  "speed_ratio": 0.7923614287572297,
+  "realtime_capable": false
+}

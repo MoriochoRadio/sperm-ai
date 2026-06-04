@@ -1,0 +1,52 @@
+[
+  {
+    "condition": "원본 (S등급)",
+    "no_norm_detections": 45.86,
+    "with_norm_detections": 28.26,
+    "no_norm_confidence": 0.6468065389238276,
+    "with_norm_confidence": 0.5432678929517561,
+    "delta_detections": -17.599999999999998,
+    "delta_confidence": -0.10353864597207141,
+    "recovery_percent": -38.377671173135624
+  },
+  {
+    "condition": "저해상도",
+    "no_norm_detections": 44.46,
+    "with_norm_detections": 37.98,
+    "no_norm_confidence": 0.6756724204316742,
+    "with_norm_confidence": 0.623558536587796,
+    "delta_detections": -6.480000000000004,
+    "delta_confidence": -0.05211388384387816,
+    "recovery_percent": -14.57489878542511
+  },
+  {
+    "condition": "모션 블러",
+    "no_norm_detections": 39.44,
+    "with_norm_detections": 33.64,
+    "no_norm_confidence": 0.6195126383076092,
+    "with_norm_confidence": 0.5382579674016281,
+    "delta_detections": -5.799999999999997,
+    "delta_confidence": -0.08125467090598104,
+    "recovery_percent": -14.705882352941172
+  },
+  {
+    "condition": "노이즈",
+    "no_norm_detections": 8.86,
+    "with_norm_detections": 6.76,
+    "no_norm_confidence": 0.3794304191662549,
+    "with_norm_confidence": 0.3718072638003784,
+    "delta_detections": -2.0999999999999996,
+    "delta_confidence": -0.007623155365876544,
+    "recovery_percent": -23.7020316027088
+  },
+  {
+    "condition": "저조도+흐림",
+    "no_norm_detections": 40.5,
+    "with_norm_detections": 38.36,
+    "no_norm_confidence": 0.6601041125515361,
+    "with_norm_confidence": 0.6330871139502501,
+    "delta_detections": -2.1400000000000006,
+    "delta_confidence": -0.027016998601286035,
+    "recovery_percent": -5.283950617283952
+  }
+]

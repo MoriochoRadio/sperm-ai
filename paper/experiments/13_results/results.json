@@ -1,0 +1,114 @@
+{
+  "data": [
+    {
+      "participant": "11",
+      "quality_score": 98,
+      "grade": "S",
+      "dim_scores": {
+        "resolution": 100,
+        "fps": 100,
+        "duration": 100,
+        "stability": 90,
+        "brightness": 100,
+        "sharpness": 100
+      },
+      "avg_count": 46.3,
+      "std_count": 2.6350205565295566,
+      "avg_confidence": 0.6443928988010785
+    },
+    {
+      "participant": "14",
+      "quality_score": 96,
+      "grade": "S",
+      "dim_scores": {
+        "resolution": 100,
+        "fps": 100,
+        "duration": 100,
+        "stability": 90,
+        "brightness": 100,
+        "sharpness": 90
+      },
+      "avg_count": 4.266666666666667,
+      "std_count": 0.8537498983243798,
+      "avg_confidence": 0.568674876820296
+    },
+    {
+      "participant": "22",
+      "quality_score": 92,
+      "grade": "S",
+      "dim_scores": {
+        "resolution": 100,
+        "fps": 100,
+        "duration": 100,
+        "stability": 90,
+        "brightness": 75,
+        "sharpness": 90
+      },
+      "avg_count": 11.033333333333333,
+      "std_count": 0.9480975102218595,
+      "avg_confidence": 0.6919775851903726
+    },
+    {
+      "participant": "23",
+      "quality_score": 84,
+      "grade": "A",
+      "dim_scores": {
+        "resolution": 100,
+        "fps": 100,
+        "duration": 100,
+        "stability": 90,
+        "brightness": 50,
+        "sharpness": 75
+      },
+      "avg_count": 3.9,
+      "std_count": 3.0479501308256345,
+      "avg_confidence": 0.6645821763409508
+    },
+    {
+      "participant": "30",
+      "quality_score": 96,
+      "grade": "S",
+      "dim_scores": {
+        "resolution": 100,
+        "fps": 100,
+        "duration": 100,
+        "stability": 90,
+        "brightness": 100,
+        "sharpness": 90
+      },
+      "avg_count": 11.35,
+      "std_count": 1.0136567466356645,
+      "avg_confidence": 0.8034305886287522
+    }
+  ],
+  "pearson_q_count": {
+    "r": 0.5497982367082522,
+    "p": 0.3370446937678697
+  },
+  "spearman_q_conf": {
+    "r": -0.30779350562554625,
+    "p": 0.614384002810333
+  },
+  "dim_correlations": {
+    "brightness": {
+      "r": 0.4318910377315646,
+      "p": 0.46770816496114237
+    },
+    "sharpness": {
+      "r": 0.7621559978446364,
+      "p": 0.13416421690714284
+    }
+  },
+  "grade_summary": {
+    "S": {
+      "n": 4,
+      "avg_count": 18.237499999999997,
+      "avg_conf": 0.6771189873601248
+    },
+    "A": {
+      "n": 1,
+      "avg_count": 3.9,
+      "avg_conf": 0.6645821763409508
+    }
+  }
+}

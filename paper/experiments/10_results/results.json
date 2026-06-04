@@ -1,0 +1,130 @@
+[
+  {
+    "participant": "11",
+    "total_crops": 1286,
+    "valid_crops": 1286,
+    "all_normal_count": 188,
+    "normal_morphology_rate": 14.618973561430792,
+    "part_rates": {
+      "head": 18.740279937791602,
+      "acrosome": 33.67029548989113,
+      "vacuole": 88.56920684292379,
+      "tail": 76.67185069984448
+    },
+    "parts_detail": {
+      "head": {
+        "normal": 241,
+        "abnormal": 1045
+      },
+      "acrosome": {
+        "normal": 433,
+        "abnormal": 853
+      },
+      "vacuole": {
+        "normal": 1139,
+        "abnormal": 147
+      },
+      "tail": {
+        "normal": 986,
+        "abnormal": 300
+      }
+    },
+    "who_compliance": true
+  },
+  {
+    "participant": "14",
+    "total_crops": 113,
+    "valid_crops": 113,
+    "all_normal_count": 10,
+    "normal_morphology_rate": 8.849557522123893,
+    "part_rates": {
+      "head": 9.734513274336283,
+      "acrosome": 31.858407079646017,
+      "vacuole": 81.41592920353983,
+      "tail": 84.070796460177
+    },
+    "parts_detail": {
+      "head": {
+        "normal": 11,
+        "abnormal": 102
+      },
+      "acrosome": {
+        "normal": 36,
+        "abnormal": 77
+      },
+      "vacuole": {
+        "normal": 92,
+        "abnormal": 21
+      },
+      "tail": {
+        "normal": 95,
+        "abnormal": 18
+      }
+    },
+    "who_compliance": true
+  },
+  {
+    "participant": "22",
+    "total_crops": 328,
+    "valid_crops": 328,
+    "all_normal_count": 39,
+    "normal_morphology_rate": 11.890243902439025,
+    "part_rates": {
+      "head": 16.76829268292683,
+      "acrosome": 29.268292682926827,
+      "vacuole": 95.1219512195122,
+      "tail": 89.32926829268293
+    },
+    "parts_detail": {
+      "head": {
+        "normal": 55,
+        "abnormal": 273
+      },
+      "acrosome": {
+        "normal": 96,
+        "abnormal": 232
+      },
+      "vacuole": {
+        "normal": 312,
+        "abnormal": 16
+      },
+      "tail": {
+        "normal": 293,
+        "abnormal": 35
+      }
+    },
+    "who_compliance": true
+  },
+  {
+    "participant": "23",
+    "total_crops": 97,
+    "valid_crops": 97,
+    "all_normal_count": 29,
+    "normal_morphology_rate": 29.896907216494846,
+    "part_rates": {
+      "head": 44.329896907216494,
+      "acrosome": 40.20618556701031,
+      "vacuole": 91.75257731958763,
+      "tail": 93.81443298969072
+    },
+    "parts_detail": {
+      "head": {
+        "normal": 43,
+        "abnormal": 54
+      },
+      "acrosome": {
+        "normal": 39,
+        "abnormal": 58
+      },
+      "vacuole": {
+        "normal": 89,
+        "abnormal": 8
+      },
+      "tail": {
+        "normal": 91,
+        "abnormal": 6
+      }
+    },
+    "who_compliance": true
+  }
+]
