@@ -11,6 +11,7 @@
 [![Phase](https://img.shields.io/badge/Phase-5%20Complete-brightgreen)]()
 [![Demo](https://img.shields.io/badge/Demo-Live-2DD4BF)]()
 [![Version](https://img.shields.io/badge/Version-v1.4.0-blueviolet)]()
+[![Paper](https://img.shields.io/badge/Paper-KKITS%202026-b31b1b)]()
 
 ---
 
@@ -27,6 +28,12 @@
 7. **Flask 웹 데모** 로 누구나 영상 업로드 후 인터랙티브 결과 확인
 
 을 자동으로 수행합니다.
+
+> 🧑‍🔬 **1인 개인 프로젝트**입니다. 이 시스템을 베이스라인으로 구축한 뒤,
+> 형태 분석의 **도메인 적응(domain adaptation)** 부분을 집중적으로 연구하여
+> **학술 논문(KKITS 2026)** 으로 발전시켰습니다. 이후 이 베이스라인은 팀 프로젝트
+> [**SEED**](https://github.com/MoriochoRadio/seed-project)로 이어졌습니다.
+> 연구·논문 내용은 아래 [**연구 성과 및 논문**](#-연구-성과-및-논문) 참고.
 
 > ⚠️ 본 시스템은 의학적 진단 도구가 아닙니다. 병원 방문 전 참고용 보조 분석 도구입니다.
 
@@ -50,14 +57,68 @@
 
 ## 🏆 핵심 성과
 
-| 지표 | 본 시스템 | 논문 최고 (motilitAI) |
+| 지표 | 본 시스템 | 비교 |
 |---|---|---|
-| 운동성 MAE (5-Fold CV) | **6.9%p** | 7.31%p |
+| 운동성 MAE (5-Fold CV) | **6.9%p** | motilitAI 7.31%p |
 | YOLO11 mAP50 | **0.677** | ~0.65 (YOLOv5l) |
-| 형태 분류 AUC (평균) | **0.727** | — |
+| 형태 분류 AUC (평균, MHSMA) | **0.727** | — |
+| **VISEM 정상형태율** (도메인 적응) | **0.5% → 16.3%** (32배 ↑) | 논문 기여 |
+| **정규화 후 검출 수 유지율** | **99.3%** | 픽셀 변환 시 −28.6% 회피 |
 | 판정 방향 정확도 | **75~100%** | — |
 
-> 동일 데이터셋(VISEM) 기준으로 운동성 분석은 논문 최고 성능을 초과 달성
+> 운동성 분석은 동일 데이터셋(VISEM)에서 논문 최고 성능을 초과 달성했고,
+> 형태 분석의 **도메인 적응**은 별도 논문(KKITS 2026)으로 정리했습니다.
+
+---
+
+## 📄 연구 성과 및 논문
+
+이 프로젝트는 단순 구현에 그치지 않고, **형태 분석의 도메인 갭(domain gap)** 문제를
+집중적으로 연구하여 학술 논문으로 발전시켰습니다.
+
+> **Practical Domain Adaptation for Computer-Aided Sperm Analysis:**
+> **Quality-Aware Video Normalization and Augmentation-Based Morphology Classification**
+> *(컴퓨터 보조 정자 분석을 위한 실용적 도메인 적응: 품질 인식 영상 정규화 및 증강 기반 형태 분류)*
+>
+> 김태경, 허용도 · 건양대학교 의료IT공학과
+> *Proceedings of KKITS (Conference on Knowledge Information Technology and Systems)*, Vol. 20, No. 1, 2026
+
+### 🎯 문제 — 학습셋 ↔ 임상 영상의 도메인 갭
+
+형태 분류 모델은 **MHSMA**(염색 위상차 크롭)로 학습되지만, 실제 적용 대상인
+**VISEM**(비염색 현미경 영상)과 시각적 특성이 크게 다릅니다. 벤치마크에서 우수한
+모델(v2, MHSMA AUC 0.800)조차 VISEM에서는 정상형태율 **0.5%** 라는 비현실적 결과를 냈습니다.
+
+### 🧩 기여 1 — 품질 인식 영상 정규화
+
+- 6차원 품질 지표(해상도·프레임률·재생시간·안정성·밝기·선명도)로 영상을 S/A/B/C/F 등급화 (F등급 거부)
+- **사양 통일(640×480·50fps·30s)만** 적용하고, CLAHE·그레이스케일 같은 **픽셀 단위 변환은 배제**
+- 사전학습 YOLO11의 픽셀 분포를 깨뜨리지 않아 검출 수 **99.3% 유지**
+  (CLAHE 적용 시 −28.6%, 그레이스케일 −14.9%의 검출 저하를 회피)
+
+### 🧬 기여 2 — VisemStyleAugment (학습 단계 도메인 증강)
+
+- 학습 시 모션 블러·가우시안 노이즈·저해상도·CLAHE 대비·명암 반전을 확률적으로 적용해 VISEM 스타일을 시뮬레이션
+- Halo 등 단편적 위치 단서를 제거해 모델이 **형태 자체를 학습**하도록 유도, **추론 시 추가 비용 0**
+- VISEM 정상형태율 **0.5% → 16.3% (32배 개선)**, VISEM 참가자 4명 전원 WHO 기준(≥4%) 충족
+
+### 📊 모델 변형 비교 (EfficientNet-B3, MHSMA 1,540장)
+
+| 모델 | 주요 구성 | MHSMA 평균 AUC | VISEM 정상형태율 |
+|---|---|---|---|
+| v1 | BCE Loss | 0.752 | 0.5% |
+| v2 | Focal Loss + WeightedSampler | **0.800** | 0.5% |
+| **v3 (채택)** | v2 + **VisemStyleAugment** | 0.727 | **16.3%** |
+| v4 | v3 + 강한 증강 | 0.714 | 18.2% |
+
+> 벤치마크 점수(v2)가 실제 적용 유효성을 보장하지 않음을 보이고, WHO 기준을 충족하면서
+> 벤치마크 성능이 더 높은 **v3를 최종 채택**했습니다.
+
+### 🔬 시도한 5가지 도메인 적응 기법
+
+의사 라벨링(확증 편향으로 실패) · 기하학적 측정(과대추정으로 실패) · TTA(28.4% 도달하나 추론 11배) ·
+앙상블 v2+v3(v2에 끌려가 0.9%) · **VisemStyleAugment(16.3%, 추가 비용 없이 채택)** —
+향후 CASA 연구를 위한 실용적 시사점으로 문서화했습니다.
 
 ---
 
@@ -306,14 +367,15 @@ sperm-ai/
 ## 📈 개발 로드맵
 
 ```
-Phase 1  ✅ 완료   운동성 분석 (MAE 6.9%p, 논문 초과)         v1.0.0
-Phase 2  ✅ 완료   CASA 키네마틱 (VCL/VSL/VAP/LIN/STR/WOB/ALH) v1.1.0
-Phase 3  ✅ 완료   형태 분석 (EfficientNet-B3, AUC 0.727)     v1.2.0
-Phase 4  ✅ 완료   AI-CASA 통합 보고서 (일반인 친화적)         v1.3.0
-Phase 5  ✅ 완료   Flask 웹 데모 (인터랙티브 보고서)           v1.4.0  ← 현재
-Phase 6  🔜 예정   외부 공유 (ngrok / 클라우드 배포)
-Phase 7  🔜 예정   도메인 적응 개선 (Virtual Staining)
-Phase 8  🔜 예정   실데이터 검증 / 학술 논문 제출
+Phase 1  ✅ 완료   운동성 분석 (MAE 6.9%p, 논문 초과)              v1.0.0
+Phase 2  ✅ 완료   CASA 키네마틱 (VCL/VSL/VAP/LIN/STR/WOB/ALH)      v1.1.0
+Phase 3  ✅ 완료   형태 분석 (EfficientNet-B3, AUC 0.727)          v1.2.0
+Phase 4  ✅ 완료   AI-CASA 통합 보고서 (일반인 친화적)              v1.3.0
+Phase 5  ✅ 완료   Flask 웹 데모 (인터랙티브 보고서)                v1.4.0
+Phase 6  ✅ 완료   문서화 (사용자/운영 가이드 · 시나리오)
+Phase 7  ✅ 완료   형태 도메인 적응 연구 (품질 인식 정규화 + VisemStyleAugment)
+Phase 8  ✅ 완료   학술 논문 작성·발표 (KKITS 2026)  ← 연구 성과
+Phase 9  🔜 예정   다기관 임상 데이터 검증 · 일반화 검증
 ```
 
 ---
@@ -343,6 +405,19 @@ Phase 8  🔜 예정   실데이터 검증 / 학술 논문 제출
 ## 📚 참고 문헌
 
 ```bibtex
+@inproceedings{kim2026casa,
+  author    = {Kim, Tae-Kyoung and Her, Yong-Do},
+  title     = {Practical Domain Adaptation for Computer-Aided Sperm Analysis:
+               Quality-Aware Video Normalization and Augmentation-Based
+               Morphology Classification},
+  booktitle = {Proceedings of Conference on Knowledge Information Technology
+               and Systems (KKITS)},
+  volume    = {20},
+  number    = {1},
+  year      = {2026},
+  publisher = {KKITS}
+}
+
 @article{thambawita2023visem,
   author  = {Thambawita, Vajira and Hicks, Steven A. and others},
   title   = {VISEM-Tracking, a human spermatozoa tracking dataset},
@@ -385,4 +460,6 @@ Phase 8  🔜 예정   실데이터 검증 / 학술 논문 제출
 
 ---
 
-*1인 개인 프로젝트 · 2026 · 문의: [GitHub Issues](https://github.com/MoriochoRadio/sperm-ai/issues)*
+*1인 개인 프로젝트 · 2026 · 형태 도메인 적응 연구는 [KKITS 2026 논문](#-연구-성과-및-논문)으로,*
+*이 베이스라인은 팀 프로젝트 [SEED](https://github.com/MoriochoRadio/seed-project)로 이어졌습니다.*
+*문의: [GitHub Issues](https://github.com/MoriochoRadio/sperm-ai/issues)*
