@@ -1,5 +1,7 @@
 # 🔬 AI-CASA: AI 기반 정자 종합 분석 시스템
 
+**🌐 Language:** **한국어** | [English](README.en.md)
+
 > 정자 현미경 영상을 입력받아 **운동성 · 운동 패턴 · 형태**를 자동 분석하고
 > WHO 기준 기반 설명형 결과를 출력하는 병원 전 단계 보조 분석 시스템
 
@@ -317,7 +319,8 @@ sperm-ai/
 │   ├── architecture.md          #   시스템 설계
 │   └── performance.md           #   상세 성능 분석
 │
-├── README.md
+├── README.md                    # 한국어
+├── README.en.md                 # English
 ├── requirements.txt
 └── bytetrack_custom.yaml
 ```
