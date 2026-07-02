@@ -54,7 +54,7 @@
 |---|---|---|
 | 운동성 MAE (5-Fold CV) | **6.9%p** | 7.31%p |
 | YOLO11 mAP50 | **0.677** | ~0.65 (YOLOv5l) |
-| 형태 분류 AUC (평균) | **0.725** | — |
+| 형태 분류 AUC (평균) | **0.727** | — |
 | 판정 방향 정확도 | **75~100%** | — |
 
 > 동일 데이터셋(VISEM) 기준으로 운동성 분석은 논문 최고 성능을 초과 달성
@@ -308,7 +308,7 @@ sperm-ai/
 ```
 Phase 1  ✅ 완료   운동성 분석 (MAE 6.9%p, 논문 초과)         v1.0.0
 Phase 2  ✅ 완료   CASA 키네마틱 (VCL/VSL/VAP/LIN/STR/WOB/ALH) v1.1.0
-Phase 3  ✅ 완료   형태 분석 (EfficientNet-B3, AUC 0.725)     v1.2.0
+Phase 3  ✅ 완료   형태 분석 (EfficientNet-B3, AUC 0.727)     v1.2.0
 Phase 4  ✅ 완료   AI-CASA 통합 보고서 (일반인 친화적)         v1.3.0
 Phase 5  ✅ 완료   Flask 웹 데모 (인터랙티브 보고서)           v1.4.0  ← 현재
 Phase 6  🔜 예정   외부 공유 (ngrok / 클라우드 배포)
